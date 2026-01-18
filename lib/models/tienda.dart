@@ -1,0 +1,18 @@
+class Tienda {
+  int? id;
+  late String codigo;
+  late String nombre;
+  late String direccion;
+  String? telefono;
+  late String responsable;
+  late bool activo;
+
+  // Para sincronización
+  String? supabaseId;
+  late DateTime createdAt;
+  late DateTime updatedAt;
+  bool sincronizado = false;
+  bool eliminado = false;
+}
+
+
