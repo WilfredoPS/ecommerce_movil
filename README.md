@@ -1,4 +1,4 @@
-# Sistema de Inventario - Offline First
+E-commerce movil
 
 DESARROLLO DE UN SISTEMA MÓVIL FULL STACK ORIENTADA A LA GESTIÓN DE E-COMMERCE
 
