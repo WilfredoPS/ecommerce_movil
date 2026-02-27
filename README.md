@@ -2,6 +2,8 @@ E-commerce movil
 
 DESARROLLO DE UN SISTEMA MÓVIL FULL STACK ORIENTADA A LA GESTIÓN DE E-COMMERCE
 
+Diseñar y desarrollar un sistema móvil Full Stack con arquitectura híbrida offline-first, utilizando Flutter para el frontend móvil y Supabase (PostgreSQL + Auth + API REST) como backend cloud, con el propósito de optimizar la gestión de e-commerce en tiendas deportivas mediante la centralización de inventarios, trazabilidad de transacciones, control automatizado de stock y mejora en la disponibilidad y seguridad de la información.
+
 ## Características Principales
 
 ### 🎯 Funcionalidades Implementadas
