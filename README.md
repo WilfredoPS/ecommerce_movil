@@ -1,22 +1,19 @@
 # Sistema de Inventario - Offline First
 
-Sistema de gestión de inventario offline-first para empresa de decoración y construcción, desarrollado en Flutter con Isar y Supabase.
+DESARROLLO DE UN SISTEMA MÓVIL FULL STACK ORIENTADA A LA GESTIÓN DE E-COMMERCE
 
 ## Características Principales
 
 ### 🎯 Funcionalidades Implementadas
 
-- ✅ **Gestión de Productos**: Crear, editar y eliminar productos con categorías (ropa deportiva, calzado deportivo, equipamiento, suplementos, accesorios)
-- ✅ **Gestión de Almacenes**: Administrar múltiples almacenes
-- ✅ **Gestión de Tiendas**: Administrar múltiples tiendas
-- ✅ **Gestión de Empleados**: Diferentes roles (admin, encargado_tienda, encargado_almacen, vendedor)
-- ✅ **Sistema de Compras**: Registrar compras a proveedores con destino a almacenes/tiendas
-- ✅ **Sistema de Ventas**: POS completo con gestión de clientes y métodos de pago
-- ✅ **Transferencias**: Mover productos entre almacenes y tiendas
-- ✅ **Inventario en Tiempo Real**: Visualizar stock por ubicación con alertas de stock bajo
-- ✅ **Dashboard**: Ventas del día, ventas globales y accesos rápidos
-- ✅ **Autenticación**: Sistema de login con permisos por rol
-- ✅ **Sincronización**: Sync automático con Supabase cuando hay conexión
+Backend: Implementación de base de datos en Supabase con tablas usuarios, productos, categorias, pedidos, detalle_pedidos y políticas RLS activas.
+Frontend: Desarrollo de aplicación móvil en Flutter con navegación funcional entre Home, Productos, Ventas e Inventario.
+
+Flujo 1: Autenticación completa (Registro/Login con Supabase Auth + JWT) y acceso diferenciado por rol (Administrador / Vendedor).
+Flujo 2: Registro de venta completo → validación de stock → generación de pedido → actualización automática de inventario
+Flujo 3: Registro de venta completo → validación de stock → generación de pedido → actualización automática de inventario
+Extras / Mejoras: Validaciones de campos obligatorios, alertas visuales de stock bajo, manejo de errores y mensajes de confirmación en operaciones críticas
+Sincronización básica offline-first: Registro de datos en SQLite y sincronización manual o automática cuando exista conectividad.
 
 ### 📊 Stack Tecnológico
 
