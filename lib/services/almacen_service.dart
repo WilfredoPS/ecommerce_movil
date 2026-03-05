@@ -49,11 +49,15 @@ class AlmacenService {
     }
     final rows = await query.get();
     var almacenes = rows.map(_fromRow).toList();
-    AppLog.d('AlmacenService.getAll: Encontrados ${almacenes.length} almacenes');
+    AppLog.d(
+      'AlmacenService.getAll: Encontrados ${almacenes.length} almacenes',
+    );
 
     // Si no hay almacenes, crear uno por defecto
     if (almacenes.isEmpty) {
-      AppLog.d('AlmacenService.getAll: No hay almacenes, creando uno por defecto...');
+      AppLog.d(
+        'AlmacenService.getAll: No hay almacenes, creando uno por defecto...',
+      );
       final almacenDefault = Almacen()
         ..codigo = 'ALM001'
         ..nombre = 'Almacén Principal'
@@ -63,39 +67,43 @@ class AlmacenService {
         ..activo = true
         ..createdAt = DateTime.now()
         ..updatedAt = DateTime.now();
-      final id = await db.into(db.almacenes).insert(_toCompanion(almacenDefault));
+      final id = await db
+          .into(db.almacenes)
+          .insert(_toCompanion(almacenDefault));
       almacenDefault.id = id;
       almacenes = [almacenDefault];
       AppLog.i('AlmacenService.getAll: Almacén por defecto creado');
     }
 
     for (int i = 0; i < almacenes.length; i++) {
-      AppLog.d('AlmacenService.getAll: [$i] ${almacenes[i].nombre} (${almacenes[i].codigo}) - Activo: ${almacenes[i].activo}');
+      AppLog.d(
+        'AlmacenService.getAll: [$i] ${almacenes[i].nombre} (${almacenes[i].codigo}) - Activo: ${almacenes[i].activo}',
+      );
     }
     return almacenes;
   }
 
   Future<List<Almacen>> getActivos() async {
     final db = await _dbService.db;
-    final rows = await (db.select(db.almacenes)
-          ..where((t) => t.eliminado.equals(false) & t.activo.equals(true)))
-        .get();
+    final rows = await (db.select(
+      db.almacenes,
+    )..where((t) => t.eliminado.equals(false) & t.activo.equals(true))).get();
     return rows.map(_fromRow).toList();
   }
 
   Future<Almacen?> getByCodigo(String codigo) async {
     final db = await _dbService.db;
-    final row = await (db.select(db.almacenes)
-          ..where((t) => t.codigo.equals(codigo)))
-        .getSingleOrNull();
+    final row = await (db.select(
+      db.almacenes,
+    )..where((t) => t.codigo.equals(codigo))).getSingleOrNull();
     return row == null ? null : _fromRow(row);
   }
 
   Future<Almacen?> getById(int id) async {
     final db = await _dbService.db;
-    final row = await (db.select(db.almacenes)
-          ..where((t) => t.id.equals(id)))
-        .getSingleOrNull();
+    final row = await (db.select(
+      db.almacenes,
+    )..where((t) => t.id.equals(id))).getSingleOrNull();
     return row == null ? null : _fromRow(row);
   }
 
@@ -112,8 +120,7 @@ class AlmacenService {
     final db = await _dbService.db;
     almacen.updatedAt = DateTime.now();
     almacen.sincronizado = false;
-    await (db.update(db.almacenes)
-          ..where((t) => t.id.equals(almacen.id ?? -1)))
+    await (db.update(db.almacenes)..where((t) => t.id.equals(almacen.id ?? -1)))
         .write(_toCompanion(almacen));
   }
 
@@ -130,9 +137,9 @@ class AlmacenService {
 
   Future<List<Almacen>> getNoSincronizados() async {
     final db = await _dbService.db;
-    final rows = await (db.select(db.almacenes)
-          ..where((t) => t.sincronizado.equals(false)))
-        .get();
+    final rows = await (db.select(
+      db.almacenes,
+    )..where((t) => t.sincronizado.equals(false))).get();
     return rows.map(_fromRow).toList();
   }
 
@@ -147,5 +154,3 @@ class AlmacenService {
     );
   }
 }
-
-
