@@ -1,406 +1,161 @@
-# Sistema de Inventario - Offline First
+1. Documentación Técnica Inicial (README)
+# Nombre del Proyecto
+DESARROLLO DE UN SISTEMA MÓVIL FULL STACK ORIENTADA A LA GESTIÓN DE E-COMMERCE
+## Descripción
+Sistema móvil Full Stack con arquitectura híbrida offline-first, orientado a la gestión integral de e-commerce para tiendas deportivas.
+Permite administrar:
+Productos
+Inventario
+Pedidos
+Clientes
+Reportes
+Autenticación con roles
+Opera en modo offline (SQLite) y sincroniza con backend cloud en Supabase (PostgreSQL).
+## Objetivo general
+Diseñar y desarrollar un sistema móvil Full Stack con arquitectura híbrida basada en Flutter y Supabase, con el propósito de optimizar la gestión de e-commerce en tiendas deportivas mediante la centralización de inventarios, la trazabilidad de transacciones y la mejora en la disponibilidad y seguridad de la información
+## Objetivos específicos (medibles)
+Diseñar una arquitectura híbrida escalable que permita integrar operación offline y sincronización en la nube, con el propósito de garantizar disponibilidad y centralización de datos.
+Desarrollar la aplicación móvil utilizando Flutter para proporcionar una interfaz intuitiva que facilite la gestión de productos, pedidos e inventarios.
+Implementar un backend en Supabase con base de datos PostgreSQL para asegurar almacenamiento estructurado, integridad referencial y acceso multiusuario.
+Diseñar y estructurar el modelo de datos relacional que permita mantener consistencia y trazabilidad de transacciones comerciales.
+Incorporar mecanismos de autenticación y control de acceso basados en roles para proteger la información y restringir operaciones sensibles.
+Implementar un mecanismo de sincronización entre la base de datos local y la base de datos en la nube para garantizar respaldo y coherencia de datos.
+Evaluar el funcionamiento del sistema mediante pruebas funcionales que validen rendimiento, seguridad y cumplimiento de requerimientos.
+## Alcance (qué incluye / qué NO incluye)
+1.Autenticación y Control de Acceso
+2.Registro y Gestión de Productos Deportivos
+3.Catálogo Digital de Productos
+4.Carrito de Compras
+5.Registro y Gestión de Clientes
+6.Gestión de Pedidos
+7.Control Automático de Stock
+8.Reportes Básicos
 
-Sistema de gestión de inventario offline-first para empresa de decoración y construcción, desarrollado en Flutter con Isar y Supabase.
+No Incluye
+Pasarela de pagos
+Facturación electrónica
+Integración ERP
+Microservicios
+App iOS o Web
+Seguridad avanzada (MFA, auditoría empresarial)
 
-## Características Principales
+## Stack tecnológico
 
-### 🎯 Funcionalidades Implementadas
+Capa	Tecnologia	Version	Proposito
+Frontend Movil	Flutter + Dart	3.x	UI movil multiplataforma con arquitectura reactiva
+Base de Datos Local	SQLite	3.x	Persistencia offline en dispositivo Android
+Backend Cloud	Supabase	Latest	BaaS con PostgreSQL, Auth, API REST, Realtime, Storage
+Base de Datos Cloud	PostgreSQL	15+	Almacenamiento relacional centralizado en la nube
+Autenticacion	Supabase Auth (JWT)	v2	Login seguro con tokens JWT y control de roles
+Arquitectura	Clean Architecture	-	Separacion de capas: UI, Logica de Negocio, Datos
+Metodologia	Scrum (Agil)	-	Desarrollo iterativo e incremental por sprints
+Plataforma Target	Android	12+	Dispositivos moviles Android de gama media-alta
 
-- ✅ **Gestión de Productos**: Crear, editar y eliminar productos con categorías (ropa deportiva, calzado deportivo, equipamiento, suplementos, accesorios)
-- ✅ **Gestión de Almacenes**: Administrar múltiples almacenes
-- ✅ **Gestión de Tiendas**: Administrar múltiples tiendas
-- ✅ **Gestión de Empleados**: Diferentes roles (admin, encargado_tienda, encargado_almacen, vendedor)
-- ✅ **Sistema de Compras**: Registrar compras a proveedores con destino a almacenes/tiendas
-- ✅ **Sistema de Ventas**: POS completo con gestión de clientes y métodos de pago
-- ✅ **Transferencias**: Mover productos entre almacenes y tiendas
-- ✅ **Inventario en Tiempo Real**: Visualizar stock por ubicación con alertas de stock bajo
-- ✅ **Dashboard**: Ventas del día, ventas globales y accesos rápidos
-- ✅ **Autenticación**: Sistema de login con permisos por rol
-- ✅ **Sincronización**: Sync automático con Supabase cuando hay conexión
 
-### 📊 Stack Tecnológico
 
-- **Flutter**: Framework principal
-- **Isar**: Base de datos local (offline-first)
-- **Supabase**: Backend y sincronización
-- **Provider**: State management
-- **Material Design 3**: UI moderna
+## Arquitectura (resumen simple)
+Usuario → App Flutter → Supabase API → PostgreSQL
+↓
+SQLite (offline)
 
-## Estructura del Proyecto
+Capa	Descripcion	Tecnologias
+Presentacion (UI)	Interfaces Flutter: LoginScreen, CatalogoScreen, CarritoScreen, PedidosScreen, InventarioScreen, ReportesScreen	Flutter, Dart, Material Design
+Logica de Negocio	Servicios: AuthService, InventarioService, VentasService, PedidosService, SyncManager, ReportesService	Dart, Providers/BLoC
+Acceso a Datos	Repositorios: SupabaseRepository, LocalSQLiteRepository, AuthRepository, LocalCacheRepo	SQLite, Supabase Dart SDK
+Backend Cloud	PostgreSQL + Auth + API REST automatica + Row Level Security + Storage	Supabase, PostgreSQL, PostgREST
 
-```
-lib/
-├── models/              # Modelos de datos Isar
-│   ├── producto.dart
-│   ├── almacen.dart
-│   ├── tienda.dart
-│   ├── empleado.dart
-│   ├── inventario.dart
-│   ├── compra.dart
-│   ├── venta.dart
-│   └── transferencia.dart
-├── services/            # Lógica de negocio
-│   ├── database_service.dart
-│   ├── producto_service.dart
-│   ├── almacen_service.dart
-│   ├── tienda_service.dart
-│   ├── empleado_service.dart
-│   ├── inventario_service.dart
-│   ├── compra_service.dart
-│   ├── venta_service.dart
-│   ├── transferencia_service.dart
-│   ├── supabase_service.dart
-│   ├── sync_service.dart
-│   └── auth_service.dart
-├── providers/           # State management
-│   ├── auth_provider.dart
-│   └── sync_provider.dart
-├── screens/             # Pantallas de la app
-│   ├── login_screen.dart
-│   ├── home_screen.dart
-│   ├── dashboard_screen.dart
-│   ├── productos_screen.dart
-│   ├── ventas_screen.dart
-│   ├── inventario_screen.dart
-│   └── ...
-└── main.dart
-```
 
-## Instalación y Configuración
+## Endpoints core (priorizados)
+Endpoint	Metodo	Descripcion	Auth Requerida
+/auth/login	POST	Autenticación de usuario - retorna JWT	No
+/auth/register	POST	Registro de nuevo usuario con rol	No
+/productos	GET	Listar todos los productos activos del catalogo	Si (todos los roles)
+/productos	POST	Crear nuevo producto deportivo	Si (Admin)
+/productos/:id	PUT	Actualizar datos o stock de un producto	Si (Admin)
+/productos/:id	DELETE	Eliminar producto del catalogo	Si (Admin)
+/pedidos	POST	Crear nuevo pedido desde el carrito	Si (todos los roles)
+/pedidos	GET	Listar pedidos (filtrado por rol del usuario)	Si
+/pedidos/:id/estado	PATCH	Actualizar estado del pedido	Si (Admin/Vendedor)
+/inventario	GET	Consultar inventario con alertas de bajo stock	Si (Admin/Vendedor)
+/reportes/ventas	GET	Reporte de ventas por periodo	Si (Admin)
+/sync	POST	Disparar sincronizacion SQLite -> Supabase	Si
 
-### 1. Prerrequisitos
+## Cómo ejecutar el proyecto (local)
+•Flutter SDK 3.x instalado y configurado (flutter doctor OK)
+•Android Studio o VS Code con extensiones Flutter/Dart
+•Cuenta en Supabase (supabase.com) con proyecto creado
+•Dispositivo Android fisico o emulador (API 31+)
+•Git instalado
 
-- Flutter SDK 3.9.2 o superior
-- Dart SDK
-- Cuenta de Supabase (opcional para sincronización)
+## Variables de entorno
+SUPABASE_URL: URL del proyecto en Supabase.
+SUPABASE_ANON_KEY: Clave pública para acceso a la API.
 
-### 2. Instalar Dependencias
+2. Configuración Inical del Entorno de Desarrollo Backend
+¿Qué hace el sistema que propone en su proyecto?
+Automatiza la gestión comercial de tiendas deportivas mediante el control de inventarios, registro de ventas y seguimiento de clientes, permitiendo trabajar sin internet y sincronizar los datos al recuperar la conexión.
+Que Tecnologías (stack), utilizara?
+Utilizará Flutter para la interfaz móvil, SQLite para la persistencia local y Supabase (PostgreSQL) para la infraestructura en la nube y servicios de autenticación.
 
-```bash
-flutter pub get
-```
+Que entidades principales tiene definidas (ejemplo: tablas SQL):
+Tabla	Descripcion	Campos Clave	Relaciones
+usuarios	Usuarios del sistema con roles diferenciados	id (UUID), email, nombre, rol (enum: admin/vendedor/cliente), activo	Sincronizada con auth.users de Supabase
+categorías	Clasificación del catálogo deportivo	id, nombre, descripcion, activo	1:N con productos
+productos	Catalogo completo de productos deportivos	id, nombre, categoria_id (FK), precio, stock, talla, color, descripcion, imagen_url, estado	N:1 categorias, 1:N detalle_pedidos, 1:N carrito
+pedidos	Ciclo de vida de cada orden de compra	id, usuario_id (FK), fecha, total, estado (enum: pendiente/confirmado/entregado/cancelado)	N:1 usuarios, 1:N detalle_pedidos
+detalle_pedidos	Items individuales de cada pedido (N:M)	id, pedido_id (FK), producto_id (FK), cantidad, precio_unitario (snapshot), subtotal (calculado)	N:1 pedidos, N:1 productos
+carrito	Estado temporal del carrito antes de confirmar	id, usuario_id (FK), producto_id (FK), cantidad, fecha_agregado	N:1 usuarios, N:1 productos
 
-### 3. Generar Código de Isar
+ Cuál es el flujo principal del sistema que propone?
+Tabla	Descripcion	Campos Clave	Relaciones
+usuarios	Usuarios del sistema con roles diferenciados	id (UUID), email, nombre, rol (enum: admin/vendedor/cliente), activo	Sincronizada con auth.users de Supabase
+categorías	Clasificación del catalogo deportivo	id, nombre, descripcion, activo	1:N con productos
+productos	Catalogo completo de productos deportivos	id, nombre, categoria_id (FK), precio, stock, talla, color, descripcion, imagen_url, estado	N:1 categorías, 1:N detalle_pedidos, 1:N carrito
+pedidos	Ciclo de vida de cada orden de compra	id, usuario_id (FK), fecha, total, estado (enum: pendiente/confirmado/entregado/cancelado)	N:1 usuarios, 1:N detalle_pedidos
+detalle_pedidos	Items individuales de cada pedido (N:M)	id, pedido_id (FK), producto_id (FK), cantidad, precio_unitario (snapshot), subtotal (calculado)	N:1 pedidos, N:1 productos
+carrito	Estado temporal del carrito antes de confirmar	id, usuario_id (FK), producto_id (FK), cantidad, fecha_agregado	N:1 usuarios, N:1 productos
 
-```bash
-flutter pub run build_runner build --delete-conflicting-outputs
-```
+3. Implementación Inicial del Backend
+Configuración tentativa del Entorno de Desarrollo Backend, según los proyectos que están desarrollando. Debería incluir:
+* Configuración de la aplicación (middlewares y rutas) * arranque del servidor
+Configuración y Arranque: Uso de los clientes oficiales de Supabase para Flutter. La aplicación inicializa la conexión en el main() validando las variables de entorno.
+Middlewares y Rutas: Implementación de guardias de ruta en el frontend para proteger módulos administrativos según el rol (Administrador/Vendedor) obtenido del token JWT.
+Modelo y Acceso a Datos: Uso del patrón Repositorio para abstraer si el dato se lee de SQLite o de la API de Supabase.
+Reglas de Negocio: Validación de stock suficiente antes de permitir la inserción del pedido en la base de datos
 
-### 4. Configurar Supabase (Opcional)
+* definición de endpoints * lógica de cada endpoint * reglas de negocio * modelo o acceso a base de datos * conexión a la base de datos * autenticación y validaciones * lectura de variables de entorno
+4. Definición de al menos 2 Endpoints (que serán considerados entregables)
+Cada Endpoint deberia incluir:
 
-En `lib/main.dart`, descomenta y configura:
+ENDPOINT 1: Crear Pedido desde Carrito
+ 
+Campo	Detalle
+Ruta	POST /pedidos  (vía Supabase RPC: crear_pedido_completo)
+Método HTTP	POST
+Autenticación	JWT requerido (Bearer Token) - Roles: Admin, Vendedor, Cliente
+Descripción	Crea un pedido completo desde los ítems del carrito del usuario autenticado, valida stock, registra detalle y descuenta inventario automáticamente via trigger PostgreSQL.
+TAREA EP-01: Implementación del Endpoint Crear Pedido
+Descripción:
+Implementar el endpoint POST /pedidos que permita a un usuario autenticado confirmar su carrito y generar un pedido. El endpoint debe: (1) validar autenticación JWT, (2) verificar disponibilidad de stock para cada ítem, (3) crear el registro de pedido con snapshot de precios, (4) insertar detalle de pedidos, (5) activar el trigger de descuento de stock, y (6) limpiar el carrito del usuario. La implementación debe manejar errores de stock insuficiente y devolver respuestas HTTP correctas.
+Resultado Esperado:
+Al ejecutar POST /pedidos con un carrito valido: HTTP 201 con el objeto pedido creado incluyendo id, fecha, total y detalle. Al enviar ítems con stock insuficiente: HTTP 400 con mensaje descriptivo. El stock de los productos se descuenta automáticamente en la base de datos. El carrito del usuario queda vacío.
+Producto / Resultado Evaluable:
+PRODUCTO EVALUABLE: Endpoint funcional que supera los siguientes casos de prueba documentados: (1) Prueba de creación exitosa con stock suficiente - esperado HTTP 201, (2) Prueba de rechazo por stock insuficiente - esperado HTTP 400 con mensaje especifico, (3) Prueba de acceso sin autenticación - esperado HTTP 401, (4) Consulta de stock en base de datos post-pedido muestra descuento correcto. METRICA: 4/4 casos de prueba pasados + código documentado en repositorio Git.
 
-```dart
-await SupabaseService().initialize(
-  'TU_SUPABASE_URL',
-  'TU_SUPABASE_ANON_KEY'
-);
-```
 
-### 5. Ejecutar la Aplicación
+ENDPOINT 2: Gestion de Productos Deportivos (CRUD)
+ 
+Campo	Detalle
+Ruta Base	/productos (Supabase PostgREST automático)
+Metodos	GET (listar) | POST (crear) | PUT/:id (actualizar) | DELETE/:id (eliminar)
+Autenticación	JWT requerido - GET: todos los roles | POST/PUT/DELETE: solo Admin
+Descripción	CRUD completo para la gestión del catalogo de productos deportivos. Incluye validaciones de campos obligatorios, gestión de imágenes via Supabase Storage, actualización de stock y políticas RLS que restringen operaciones criticas al rol administrador.
 
-```bash
-flutter run
-```
 
-## Uso del Sistema
-
-### Roles y Permisos
-
-#### Administrador (`admin`)
-- Acceso completo a todas las funcionalidades
-- Gestión de productos, almacenes, tiendas y empleados
-- Realizar compras, ventas y transferencias
-- Ver reportes globales
-
-#### Encargado de Tienda (`encargado_tienda`)
-- Realizar ventas
-- Solicitar transferencias
-- Ver inventario de su tienda
-- Ver reportes de su tienda
-
-#### Encargado de Almacén (`encargado_almacen`)
-- Realizar compras
-- Gestionar transferencias
-- Ver inventario de su almacén
-- Ver reportes de su almacén
-
-#### Vendedor (`vendedor`)
-- Realizar ventas
-- Ver inventario de su tienda
-
-### Flujo de Trabajo Típico
-
-1. **Login**: Ingresar con email y contraseña
-2. **Dashboard**: Ver resumen de ventas del día
-3. **Productos**: Gestionar catálogo de productos
-4. **Compras**: Registrar compras a proveedores → Actualiza inventario automáticamente
-5. **Ventas**: Realizar ventas → Descuenta inventario automáticamente
-6. **Transferencias**: Mover productos entre ubicaciones
-7. **Inventario**: Monitorear stock en tiempo real
-8. **Sincronización**: Sync manual o automático con Supabase
-
-## Base de Datos Supabase
-
-### Estructura de Tablas (SQL)
-
-```sql
--- Productos
-CREATE TABLE productos (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  codigo VARCHAR UNIQUE NOT NULL,
-  nombre VARCHAR NOT NULL,
-  descripcion TEXT,
-  categoria VARCHAR NOT NULL,
-  unidad_medida VARCHAR NOT NULL,
-  precio_compra DECIMAL(10,2) NOT NULL,
-  precio_venta DECIMAL(10,2) NOT NULL,
-  stock_minimo INTEGER DEFAULT 0,
-  eliminado BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Almacenes
-CREATE TABLE almacenes (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  codigo VARCHAR UNIQUE NOT NULL,
-  nombre VARCHAR NOT NULL,
-  direccion VARCHAR NOT NULL,
-  telefono VARCHAR,
-  responsable VARCHAR NOT NULL,
-  activo BOOLEAN DEFAULT TRUE,
-  eliminado BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Tiendas
-CREATE TABLE tiendas (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  codigo VARCHAR UNIQUE NOT NULL,
-  nombre VARCHAR NOT NULL,
-  direccion VARCHAR NOT NULL,
-  telefono VARCHAR,
-  responsable VARCHAR NOT NULL,
-  activo BOOLEAN DEFAULT TRUE,
-  eliminado BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Empleados
-CREATE TABLE empleados (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  codigo VARCHAR UNIQUE NOT NULL,
-  nombres VARCHAR NOT NULL,
-  apellidos VARCHAR NOT NULL,
-  email VARCHAR UNIQUE NOT NULL,
-  telefono VARCHAR NOT NULL,
-  rol VARCHAR NOT NULL,
-  tienda_id VARCHAR,
-  almacen_id VARCHAR,
-  activo BOOLEAN DEFAULT TRUE,
-  supabase_user_id UUID,
-  eliminado BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Inventarios
-CREATE TABLE inventarios (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  producto_id VARCHAR NOT NULL,
-  ubicacion_tipo VARCHAR NOT NULL,
-  ubicacion_id VARCHAR NOT NULL,
-  cantidad DECIMAL(10,2) NOT NULL DEFAULT 0,
-  ultima_actualizacion TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(producto_id, ubicacion_tipo, ubicacion_id)
-);
-
--- Compras
-CREATE TABLE compras (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  numero_compra VARCHAR UNIQUE NOT NULL,
-  fecha_compra TIMESTAMPTZ NOT NULL,
-  proveedor VARCHAR NOT NULL,
-  numero_factura VARCHAR,
-  destino_tipo VARCHAR NOT NULL,
-  destino_id VARCHAR NOT NULL,
-  empleado_id VARCHAR NOT NULL,
-  subtotal DECIMAL(10,2) NOT NULL,
-  impuesto DECIMAL(10,2) NOT NULL,
-  total DECIMAL(10,2) NOT NULL,
-  estado VARCHAR NOT NULL,
-  observaciones TEXT,
-  eliminado BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Detalle Compras
-CREATE TABLE detalle_compras (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  compra_id UUID REFERENCES compras(id),
-  producto_id VARCHAR NOT NULL,
-  cantidad DECIMAL(10,2) NOT NULL,
-  precio_unitario DECIMAL(10,2) NOT NULL,
-  subtotal DECIMAL(10,2) NOT NULL
-);
-
--- Ventas
-CREATE TABLE ventas (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  numero_venta VARCHAR UNIQUE NOT NULL,
-  fecha_venta TIMESTAMPTZ NOT NULL,
-  tienda_id VARCHAR NOT NULL,
-  empleado_id VARCHAR NOT NULL,
-  cliente VARCHAR NOT NULL,
-  cliente_documento VARCHAR,
-  cliente_telefono VARCHAR,
-  subtotal DECIMAL(10,2) NOT NULL,
-  descuento DECIMAL(10,2) NOT NULL,
-  impuesto DECIMAL(10,2) NOT NULL,
-  total DECIMAL(10,2) NOT NULL,
-  metodo_pago VARCHAR NOT NULL,
-  estado VARCHAR NOT NULL,
-  observaciones TEXT,
-  eliminado BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Detalle Ventas
-CREATE TABLE detalle_ventas (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  venta_id UUID REFERENCES ventas(id),
-  producto_id VARCHAR NOT NULL,
-  cantidad DECIMAL(10,2) NOT NULL,
-  precio_unitario DECIMAL(10,2) NOT NULL,
-  descuento DECIMAL(10,2) NOT NULL,
-  subtotal DECIMAL(10,2) NOT NULL
-);
-
--- Transferencias
-CREATE TABLE transferencias (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  numero_transferencia VARCHAR UNIQUE NOT NULL,
-  fecha_transferencia TIMESTAMPTZ NOT NULL,
-  origen_tipo VARCHAR NOT NULL,
-  origen_id VARCHAR NOT NULL,
-  destino_tipo VARCHAR NOT NULL,
-  destino_id VARCHAR NOT NULL,
-  empleado_id VARCHAR NOT NULL,
-  estado VARCHAR NOT NULL,
-  fecha_recepcion TIMESTAMPTZ,
-  empleado_recepcion_id VARCHAR,
-  observaciones TEXT,
-  eliminado BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Detalle Transferencias
-CREATE TABLE detalle_transferencias (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  transferencia_id UUID REFERENCES transferencias(id),
-  producto_id VARCHAR NOT NULL,
-  cantidad_enviada DECIMAL(10,2) NOT NULL,
-  cantidad_recibida DECIMAL(10,2) NOT NULL
-);
-```
-
-## Características Offline-First
-
-- **Base de datos local Isar**: Todos los datos se almacenan localmente
-- **Funcionamiento sin conexión**: La app funciona completamente offline
-- **Sincronización inteligente**: Al detectar conexión, sincroniza cambios con Supabase
-- **Resolución de conflictos**: Timestamps para determinar versión más reciente
-- **Queue de sincronización**: Cambios pendientes se sincronizan en orden
-
-## 3) Seguridad y Cumplimiento
-
-### 3.1 Gestión de usuarios — A07 Fallas de identificación
-- **User ID (código de usuario)**: Se define como `Empleado.codigo` con formato `AAA-0000` (3 letras mayúsculas, guion, 4–6 dígitos). Ejemplos: `EMP-0001`, `ADM-1024`. La app valida este formato en el alta/edición.
-- **ABM de Usuarios**: Módulo de empleados permite Altas, Bajas lógicas y Modificaciones (pantalla `Empleados`). Los usuarios se asocian a un rol y a una ubicación (tienda/almacén). Campo `supabase_user_id` enlaza la cuenta de autenticación en la nube.
-- **Reglas**:
-  - Códigos únicos y no reutilizados.
-  - Bajas son lógicas (campo `eliminado`) para trazabilidad.
-  - Activación/Desactivación controla acceso sin perder histórico.
-
-### 3.2 Gestión de contraseñas — A07 Fallas de autenticación
-- **Política de contraseñas** (en `lib/utils/password_policy.dart`):
-  - Longitud mínima: 10 caracteres; máxima: 128.
-  - Debe contener al menos: 1 mayúscula, 1 minúscula, 1 dígito, 1 símbolo.
-  - Bloquea contraseñas comunes.
-  - Vida útil sugerida: 90 días (exposición y helper para aviso).
-- **Bloqueo por intentos fallidos** (en `AuthService.login`):
-  - 5 intentos fallidos → bloqueo de 15 minutos.
-  - Reinicio del contador al inicio de sesión exitoso.
-- **Hash SHA-256 con sal (offline)**:
-  - En registro se guarda localmente `salt + sha256(salt:password)` para permitir verificación offline.
-  - La autenticación principal sigue delegada a Supabase (hash seguro en servidor y TLS en tránsito).
-- **MFA**:
-  - Soportado vía Supabase (OTP/Magic Link/TOTP). Recomendado habilitar MFA en el proyecto de Supabase para cuentas privilegiadas.
-- **Almacenamiento**:
-  - Las contraseñas no se almacenan localmente; autenticación delegada a Supabase Auth.
-
-### 3.3 Gestión de roles — A01 Pérdida de control de acceso
-- **Matriz de roles (resumen)**:
-
-| Rol               | Permisos clave                                                                 |
-|-------------------|---------------------------------------------------------------------------------|
-| admin             | ver_dashboard, gestionar_productos/almacenes/tiendas/empleados, compras, ventas, transferencias, reportes, inventario_global |
-| encargado_tienda  | ver_dashboard, ventas, solicitar_transferencias, inventario_tienda, reportes_tienda |
-| encargado_almacen | ver_dashboard, compras, gestionar_transferencias, inventario_almacen, reportes_almacen |
-| vendedor          | ventas, inventario_tienda                                                       |
-
-- **ABM de roles y accesos**:
-  - El sistema aplica permisos por rol en `AuthService.hasPermission`.
-  - Granularidad por permiso nominal; ampliable para crear nuevos roles o modificar permisos existentes.
-  - Los roles no usados pueden darse de baja quitándolos de asignaciones y removiéndolos de la matriz.
-
-### 3.4 Criptografía — A02 Fallas criptográficas
-- **En tránsito**: Todo el tráfico con Supabase usa TLS (`https`). Requiere URL `https://` para inicializar.
-- **En reposo (nube)**: Datos en Postgres gestionado por Supabase (cifrado administrado por el proveedor). Tokens JWT emitidos por Supabase.
-- **Cliente local**: Base de datos local SQLite vía Drift. Para datos altamente sensibles se recomienda habilitar una solución con cifrado a nivel de base (p.ej. SQLCipher) o cifrar campos sensibles a nivel de aplicación.
-- **Gestión de claves/secrets**: Evitar incrustar llaves en el código distribuible. Use variables de entorno/servicios seguros para `anon key` y URL en despliegues productivos.
-
-## Próximas Funcionalidades
-
-- [ ] Reportes avanzados con gráficos
-- [ ] Exportación de datos a Excel/PDF
-- [ ] Gestión completa de almacenes y tiendas
-- [ ] Gestión completa de empleados
-- [ ] Gestión completa de compras
-- [ ] Gestión completa de transferencias
-- [ ] Códigos de barras/QR
-- [ ] Notificaciones push
-- [ ] Backup automático
-- [ ] Multi-idioma
-
-## Desarrollo
-
-### Generar Modelos Isar
-
-Después de modificar los modelos, ejecutar:
-
-```bash
-flutter pub run build_runner build --delete-conflicting-outputs
-```
-
-### Limpiar Build
-
-```bash
-flutter clean
-flutter pub get
-flutter pub run build_runner build --delete-conflicting-outputs
-```
-
-## Licencia
-
-Propietario - Todos los derechos reservados
-
-## Soporte
-
-Para soporte o consultas, contactar al equipo de desarrollo.
+TAREA EP-02: Implementacion del CRUD de Productos con Control de Acceso
+Descripción:
+Implementar el modulo completo de gestión de productos que incluya: (1) Endpoint GET /productos con filtrado por categoría y búsqueda por nombre, funcionando en modo offline-first (SQLite) con fallback a Supabase; (2) Endpoint POST /productos con validaciones de campos obligatorios, subida de imagen a Supabase Storage y restricción por rol Admin via RLS; (3) Endpoint PUT /productos/:id para actualización de datos y stock; (4) Endpoint DELETE /productos/:id con restricción de rol Admin. Todos los endpoints deben implementar manejo de errores, logging y sincronización con la base de datos local.
+Resultado Esperado:
+Al ejecutar GET /productos: Lista de productos activos con datos de categoría, funcionando tanto online (datos de Supabase) como offline (datos de SQLite). Al ejecutar POST /productos como Admin: HTTP 201 con el producto creado e imagen URL. Al ejecutar POST /productos como Vendedor/Cliente: HTTP 403. Al ejecutar DELETE como Admin: HTTP 204, producto eliminado de Supabase y SQLite. Validaciones retornan HTTP 400 con mensajes descriptivos.
+Producto / Resultado Evaluable:
+PRODUCTO EVALUABLE: Suite de pruebas que demuestre el correcto funcionamiento del CRUD: (1) GET retorna lista con >= 1 producto - HTTP 200, (2) POST con rol Admin crea producto - HTTP 201 con datos completos, (3) POST con rol Vendedor es rechazado - HTTP 403, (4) POST sin campos obligatorios - HTTP 400 con detalle del error, (5) DELETE con rol Admin elimina el producto - HTTP 204, (6) DELETE con rol Vendedor es rechazado - HTTP 403. ENTREGABLE: Código en repositorio Git + colección Postman/Thunder Client con los 6 casos de prueba documentados y capturas de pantalla de respuestas.
